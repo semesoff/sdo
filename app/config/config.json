@@ -1,13 +1,18 @@
 {
 	"database": {
 		"host": "localhost",
-		"port": 8080,
+		"port": 5432,
 	  	"user": "root",
 	  	"password": "root",
-		"name": "db"
+		"name": "sdo"
 	},
   	"app": {
 	  	"host": "localhost",
 		"port": 8040
+	},
+  	"jwt": {
+	  	"secret_key": "secret_key",
+	    "algorithm": "HS256",
+	  	"expires_in": 2592000
 	}
 }

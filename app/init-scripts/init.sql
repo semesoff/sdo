@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS users  (
+    id INTEGER PRIMARY KEY,
+    username VARCHAR(64) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    roleType VARCHAR(255) NOT NULL DEFAULT 'student',
+    studyGroup VARCHAR(32)
+);
