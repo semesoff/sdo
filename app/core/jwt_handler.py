@@ -29,7 +29,7 @@ def decode_access_token(token: str) -> Union[dict, str]:
     """
     Декодирование JWT-токена.
     :param token: Токен для декодирования.
-    :return: Декодированные данные токена или None, если токен недействителен.
+    :return: Декодированные данные токена или str, если токен недействителен.
     """
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
