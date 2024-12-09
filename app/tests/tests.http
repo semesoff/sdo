@@ -1,15 +1,54 @@
 ###
 GET http://localhost:8000/user_data
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjMxLTMzNSIsImV4cCI6MTczNjI2MzY4Mn0.G5HjmEyKSfTAUblqeyNl-pb60_j4dBf91MlmP-IkOoY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
 Content-Type: application/json
 
 ###
 POST http://localhost:8000/register
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjMxLTMzNSIsImV4cCI6MTczNjI2MzY4Mn0.G5HjmEyKSfTAUblqeyNl-pb60_j4dBf91MlmP-IkOoY
 Content-Type: application/json
 
 {
-    "username": "student_new",
+    "username": "student",
     "password": "student",
     "group_name": "231-335"
 }
+
+###
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+    "username": "student",
+    "password": "student"
+}
+
+###
+GET http://localhost:8000/subjects
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: application/json
+
+###
+GET http://localhost:8000/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: application/json
+
+###
+POST http://localhost:8000/upload/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="solution.py"
+Content-Type: text/x-python
+
+print("Hello, World!")
+print("Тест работает или нет?!")
+def test():
+    print("Тест работает!")
+test()
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+POST http://localhost:8000/test/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: application/json

@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from http import HTTPStatus
 
 from app.core.check_auth import check_auth
-from app.core.jwt_handler import decode_access_token
 from app.db.db import get_user_data
 from app.schemas.users import UserStatus
 
@@ -27,9 +26,9 @@ def get_user_status(authorization: str = Header(...)) -> JSONResponse:
 async def user_status(data_request: dict = Depends(get_user_status)):
     return data_request
 
+
 @router.get("/user_data")
 async def user_data(authorization: str = Header(...)) -> JSONResponse:
-    print(123324234)
     check_data = check_auth(authorization)
     if isinstance(check_data, JSONResponse):
         return check_data

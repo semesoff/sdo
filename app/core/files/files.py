@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from fastapi import UploadFile
+
 
 def save_file(directory_path: str, file_name: str, file_content: bytes) -> str:
     Path(directory_path).mkdir(parents=True, exist_ok=True)
@@ -18,3 +20,9 @@ def delete_file(file_path: str) -> bool:
         return False
     except Exception as error:
         return False
+
+
+def check_type(file: UploadFile) -> (bool, str):
+    if not file.filename.endswith('.py'):
+        return False, 'Invalid file type. Only .py files are allowed.'
+    return True, ''

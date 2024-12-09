@@ -1,7 +1,10 @@
+version: "3.8"
 
 services:
   db:
-    image: postgres:latest
+    build: ../../../db/sdo-postgre-db
+    container_name: db_postgres_sdo
+    image: postgres:15.3
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
@@ -9,10 +12,10 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ./pgdata:/var/lib/postgresql/data
     networks:
-      - sdo_network
+      - app-network
 
 networks:
-  sdo_network:
+  app-network:
     driver: bridge
