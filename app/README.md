@@ -1,25 +1,6 @@
-# sdo-postgre-db
-
-[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/C-PLUS-PLUS-GENIUS/sdo-postgre-db)
+# Postgres database methods
 
 ## База данных для сайта с проверкой лабораторных работ по программированию
-
-#### Клонирование репозитория
-
-```bash
-git clone https://github.com/C-PLUS-PLUS-GENIUS/sdo-postgre-db.git
-cd sdo-postgre-db
-```
-
-Для создания контейнера необходимо выполнить команду в директории c docker-compose:
-```bash
-docker-compose up --build
-```
-
-Для старта контейнера необходимо выполнить команду в директории c docker-compose:
-```bash
-docker-compose up -d
-```
 
 Применение функций для доступа к БД можно посмотреть в файле test.py
 
