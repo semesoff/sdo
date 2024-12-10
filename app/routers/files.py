@@ -126,7 +126,6 @@ async def test_solution(task_id: int, authorization: str = Header(...)):
 # Получение информации о задаче по task_id и информация о том, сдал ли пользователь
 # хотя бы одно правильное решение
 @router.get("/task/{task_id}")
-@router.get("/task/{task_id}")
 async def get_task_info(task_id: int, authorization: str = Header(...)):
     check_data = check_auth(authorization)
     if isinstance(check_data, JSONResponse):
