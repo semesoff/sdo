@@ -35,7 +35,9 @@ reg_user_in_subject(user_id=3, subject_identifier=1)
 reg_user_in_subject(user_id=3, subject_identifier=4)
 
 # Добавление заданий по ID дисциплины
-add_task(name="Задание 1. Python - числовые типы", subject_identifier=1, description="Задача на числовые типы",
+add_task(name="Задание 1. Python - числовые типы", subject_identifier=1, description="Задача на числовые типы\n"
+                                                                                     "Пример входных данных: 1 2 3\n"
+                                                                                     "Пример выходных данных: 0 2",
          max_symbols_count=128, max_strings_count=10, teacher_formula="b1=a1+a2-a3\nb2=b1+a2",
          input_variables="a1\na2\na3")
 add_task(name="Задание 1. С++ - числовые типы", subject_identifier=2, description="Задача на числовые типы",
@@ -71,9 +73,27 @@ add_task(name="Задание 4. C# - массивы", subject_identifier=4, des
 add_task(name="Задание 5. C# - классы", subject_identifier=4, description="Задача на классы",
          max_symbols_count=128, max_strings_count=10, teacher_formula="a + b", input_variables="a1, a2")
 
-# Добавление авто-тестов для заданий
-add_test_case(input_data="1 2 0 7", output_data="10", task_id=1)
-add_test_case(input_data="3 4 2 0", output_data="9", task_id=2)
+# Добавление тестовых случаев для задания по ID
+add_test_case(input_data="1 2 3", output_data="0 2", task_id=1)
+add_test_case(input_data="4 5 6", output_data="3 8", task_id=1)
+add_test_case(input_data="7 8 9", output_data="6 14", task_id=1)
+add_test_case(input_data="10 11 12", output_data="9 20", task_id=1)
+add_test_case(input_data="13 14 15", output_data="12 26", task_id=1)
+add_test_case(input_data="16 17 18", output_data="15 32", task_id=1)
+add_test_case(input_data="19 20 21", output_data="18 38", task_id=1)
+add_test_case(input_data="22 23 24", output_data="21 44", task_id=1)
+add_test_case(input_data="25 26 27", output_data="24 50", task_id=1)
+add_test_case(input_data="28 29 30", output_data="27 56", task_id=1)
+add_test_case(input_data="31 32 33", output_data="30 62", task_id=1)
+add_test_case(input_data="34 35 36", output_data="33 68", task_id=1)
+add_test_case(input_data="37 38 39", output_data="36 74", task_id=1)
+add_test_case(input_data="40 41 42", output_data="39 80", task_id=1)
+add_test_case(input_data="43 44 45", output_data="42 86", task_id=1)
+add_test_case(input_data="46 47 48", output_data="45 92", task_id=1)
+add_test_case(input_data="49 50 51", output_data="48 98", task_id=1)
+add_test_case(input_data="52 53 54", output_data="51 104", task_id=1)
+add_test_case(input_data="55 56 57", output_data="54 110", task_id=1)
+add_test_case(input_data="58 59 60", output_data="57 116", task_id=1)
 
 # Добавление решения для задания
 add_solution(code="print('Hello, World!')", user_id=3, task_id=1)

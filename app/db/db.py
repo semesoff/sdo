@@ -71,6 +71,7 @@ class Solution(Base):
     lengthTestResult = Column(Boolean, nullable=True)
     formulaTestResult = Column(Boolean, nullable=True)
     autoTestResult = Column(Integer, nullable=True)
+    status = Column(String, nullable=True)  # Новое поле
 
     # ForeignKeys
     User_id = Column(Integer, ForeignKey('User.id'), nullable=False)
@@ -383,6 +384,19 @@ def add_solution(code, user_id, task_id, mark=None, length_test_result=None, for
             return "Error adding solution"
 
 
+def update_solution_status(solution_id: int, status: str):
+    with Session() as session:
+        try:
+            solution = session.query(Solution).filter_by(id=solution_id).first()
+            if solution:
+                solution.status = status
+                session.commit()
+        except Exception as e:
+            session.rollback()
+            print(f"Error updating solution status: {e}")
+            raise
+
+
 def get_solutions_by_user(user_id):
     """
     Получает все решения, связанные с пользователем по его ID.
@@ -527,6 +541,9 @@ def get_task_data(task_id: int) -> dict | None:
         task = session.query(Task).filter_by(id=task_id).first()
         if task:
             return {
+                "id": task.id,
+                "name": task.name,
+                "description": task.description,
                 "teacher_formula": task.teacher_formula,
                 "input_variables": task.input_variables
             }
