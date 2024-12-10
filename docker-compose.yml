@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    build: ../../../db/sdo-postgre-db
+    build: ../../db/sdo-postgre-db
     container_name: db_postgres_sdo
     image: postgres:15.3
     environment:
@@ -13,6 +13,7 @@ services:
       - "5432:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+      - ./app/init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
 
