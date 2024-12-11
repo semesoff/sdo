@@ -15,11 +15,12 @@ create_tables()
 
 # Добавление пользователей
 add_user_test(username='admin', password='adminPass', role_type='admin', form_education='Бюджет',
-              faculty='Информационные системы и технологии')
+              faculty='Информационные системы и технологии', first_name='Admin', last_name='User', middle_name=None)
 add_user_test(username='teacher1', password='teacherPass', role_type='teacher', form_education=None,
-              faculty='Информационные системы и технологии')
+              faculty='Информационные системы и технологии', first_name='Иван', last_name='Калмыков', middle_name='Денисович')
 add_user_test(username='student', password='student', role_type='student', study_group='211-365',
-              form_education='Платная', faculty='Вычислительная техника и программное обеспечение')
+              form_education='Платная', faculty='Вычислительная техника и программное обеспечение',
+              first_name='Петров', last_name='Антон', middle_name='Данилович')
 
 # Добавление дисциплин
 add_subject(name="Python")
@@ -33,6 +34,11 @@ reg_user_in_subject(user_id=2, subject_identifier=2)
 # Привязка пользователя к дисциплине по названию дисциплины
 reg_user_in_subject(user_id=3, subject_identifier=1)
 reg_user_in_subject(user_id=3, subject_identifier=4)
+
+# Добавление оценок пользователю по ID дисциплины
+add_user_subject_grade(user_id=2, subject_id=1, grade=5)
+add_user_subject_grade(user_id=3, subject_id=1, grade=6)
+add_user_subject_grade(user_id=3, subject_id=4, grade=8)
 
 # Добавление заданий по ID дисциплины
 add_task(name="Задание 1. Python - числовые типы", subject_identifier=1, description="Задача на числовые типы\n"

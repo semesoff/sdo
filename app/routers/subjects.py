@@ -9,7 +9,7 @@ from app.db.db import get_user_subjects, is_user_enrolled_in_subject, get_tasks_
 router = APIRouter()
 
 
-# return user subjects [[1, "Python"], [2, "C++"]] or "Subjects not found" | [id, name]
+# return user subjects [[1, "Python", 5], [2, "C++", 7]] or "Subjects not found" | [id, name, grade]
 @router.get("/subjects")
 async def get_subjects(authorization: str = Header(...)) -> JSONResponse:
     check_data = check_auth(authorization)

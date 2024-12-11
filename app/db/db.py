@@ -1,6 +1,6 @@
 from typing import Union
 
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, Boolean, Float
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -37,6 +37,9 @@ class User(Base):
 
     # Fields
     id = Column(Integer, primary_key=True)
+    first_name = Column(String(64), nullable=False)
+    last_name = Column(String(64), nullable=False)
+    middle_name = Column(String(64), nullable=True)
     username = Column(String(64), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
     roleType = Column(RoleTypeEnum, nullable=False, default='student')
@@ -47,6 +50,7 @@ class User(Base):
     # Relationships
     solutions = relationship('Solution', back_populates='user', cascade="all, delete-orphan")
     subjects = relationship('Subject', secondary=association_table, back_populates='users')
+    subject_grades = relationship("UserSubjectGrade", order_by="UserSubjectGrade.id", back_populates="user")
 
 
 class Subject(Base):
@@ -59,6 +63,22 @@ class Subject(Base):
     # Relationships
     tasks = relationship('Task', back_populates='subject')
     users = relationship('User', secondary=association_table, back_populates='subjects')
+    user_grades = relationship("UserSubjectGrade", order_by="UserSubjectGrade.id", back_populates="subject")
+
+
+class UserSubjectGrade(Base):
+    __tablename__ = 'user_subject_grades'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('User.id'))
+    subject_id = Column(Integer, ForeignKey('Subject.id'))
+    grade = Column(Float)
+
+    user = relationship("User", back_populates="subject_grades")
+    subject = relationship("Subject", back_populates="user_grades")
+
+
+User.subject_grades = relationship("UserSubjectGrade", order_by=UserSubjectGrade.id, back_populates="user")
+Subject.user_grades = relationship("UserSubjectGrade", order_by=UserSubjectGrade.id, back_populates="subject")
 
 
 class Solution(Base):
@@ -137,6 +157,42 @@ class TestResult(Base):
     solution = relationship('Solution', back_populates='testResults')
 
 
+def add_user_subject_grade(user_id, subject_id, grade):
+    """
+    Добавляет оценку пользователя за предмет.
+
+    :param user_id: ID пользователя
+    :param subject_id: ID предмета
+    :param grade: Оценка (от 0 до 10)
+    :return: None
+    """
+    with Session() as session:
+        try:
+            user_subject_grade = UserSubjectGrade(user_id=user_id, subject_id=subject_id, grade=grade)
+            session.add(user_subject_grade)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            print(f"Error adding user subject grade: {e}")
+            raise
+
+
+def get_user_subject_grades(user_id):
+    """
+    Получает все оценки пользователя за предметы.
+
+    :param user_id: ID пользователя
+    :return: Список оценок за предметы
+    """
+    with Session() as session:
+        try:
+            grades = session.query(UserSubjectGrade).filter_by(user_id=user_id).all()
+            return grades
+        except Exception as e:
+            print(f"Error retrieving user subject grades: {e}")
+            raise
+
+
 def validate_user(username: str, password: str) -> Union[dict, bool]:
     """
     Validates the username and password of a user.
@@ -170,6 +226,9 @@ def get_user_data(username: str) -> UserSchema | None:
         if user:
             return UserSchema(
                 username=user.username,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                middle_name=user.middle_name,
                 password=user.password,
                 roleType=user.roleType,
                 studyGroup=user.studyGroup,
@@ -191,6 +250,9 @@ def add_user(register_data: RegisterRequest) -> Union[dict, str]:
     :return: A dictionary with user information if the user is added successfully, or an error message.
     """
     new_user = User(
+        first_name="Иван",
+        last_name="Иванов",
+        middle_name="Иванович",
         username=register_data.username,
         password=register_data.password,
         roleType='student',  # Default role type
@@ -214,7 +276,8 @@ def add_user(register_data: RegisterRequest) -> Union[dict, str]:
             return "User not added"
 
 
-def add_user_test(username, password, role_type='student', study_group='-', form_education='-', faculty='-'):
+def add_user_test(username, password, role_type='student', study_group='-', form_education='-', faculty='-',
+                  first_name='Иван', last_name='Иванов', middle_name='Иванович'):
     """
     Добавляет нового пользователя в базу данных.
 
@@ -240,6 +303,9 @@ def add_user_test(username, password, role_type='student', study_group='-', form
 
             # Создание нового пользователя
             new_user = User(
+                first_name=first_name,
+                last_name=last_name,
+                middle_name=middle_name,
                 username=username,
                 password=password,
                 roleType=role_type,
@@ -310,12 +376,14 @@ def get_user_subjects(username: str) -> str | list:
                 return "User not found"
 
             # Возвращаем список всех дисциплин, на которые зачислен пользователь
-            subjects = [[subject.id, subject.name] for subject in user.subjects]
+            subjects = []
+            for subject in user.subjects:
+                grade = session.query(UserSubjectGrade).filter_by(user_id=user.id, subject_id=subject.id).first()
+                subjects.append([subject.id, subject.name, grade.grade if grade else None])
             return subjects
 
         except Exception as e:
-            print(f"Error retrieving subjects for user {username}: {e}")
-            raise
+            return f"Error retrieving subjects for user {username}: {e}"
 
 
 def get_subject_id_by_task(task_id: int) -> int | None:
@@ -526,7 +594,8 @@ def get_latest_solution(user_id: int, task_id: int) -> Solution | None:
     :return: Последнее решение пользователя, если найдено, иначе None
     """
     with Session() as session:
-        solution = session.query(Solution).filter_by(User_id=user_id, Task_id=task_id).order_by(Solution.id.desc()).first()
+        solution = session.query(Solution).filter_by(User_id=user_id, Task_id=task_id).order_by(
+            Solution.id.desc()).first()
         return solution
 
 
