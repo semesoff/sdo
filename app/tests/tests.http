@@ -1,0 +1,72 @@
+###
+# Получение данных пользователя
+GET http://localhost:8000/user_data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: application/json
+
+###
+# Регистрация пользователя
+POST http://localhost:8000/register
+Content-Type: application/json
+
+{
+    "username": "student",
+    "password": "student",
+    "group_name": "231-335"
+}
+
+###
+# Логирование пользователя
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+    "username": "student",
+    "password": "student"
+}
+
+###
+# Получение предметов пользователя
+GET http://localhost:8000/subjects
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: application/json
+
+###
+# Получение информации о задаче с ID 1
+GET http://localhost:8000/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: application/json
+
+###
+# Загрузка решения задачи в Task с ID 1
+POST http://localhost:8000/upload/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="solution.py"
+Content-Type: text/x-python
+
+inputs = input().split()  # Разделение строки на список
+a1 = int(inputs[0])  # Преобразуем первое значение в число
+a2 = int(inputs[1])  # Преобразуем второе значение в число
+a3 = int(inputs[2])  # Преобразуем третье значение в число
+
+b1 = a1 + a2 - a3  # Выполняем расчет для b1
+b2 = b1 + a2  # Выполняем расчет для b2
+
+print(b1, b2)  # Выводим результаты
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+# Тестирование последнего загруженного решения задачи с Task ID 1
+POST http://localhost:8000/test/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: application/json
+
+###
+# Получение информации о задаче с Task ID 1 и статусе решений пользователя
+GET http://localhost:8000/task/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
+Content-Type: application/json

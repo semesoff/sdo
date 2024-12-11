@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app_container
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    container_name: db_postgres_sdo
+    image: postgres:15.3
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: sdo
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./app/init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
