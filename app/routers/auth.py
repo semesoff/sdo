@@ -4,11 +4,11 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from http import HTTPStatus
 
-from app.config.config import init_config
-from app.core.jwt_handler import create_access_token
-from app.db.db import validate_user, add_user
-from app.schemas.auth import LoginRequest, LoginResponse, RegisterRequest, RegisterResponse
-from app.schemas.jwt_token import TokenData
+from  config.config import init_config
+from  core.jwt_handler import create_access_token
+from  db.db import validate_user, add_user
+from  schemas.auth import LoginRequest, LoginResponse, RegisterRequest, RegisterResponse
+from  schemas.jwt_token import TokenData
 
 router = APIRouter()
 cfg = init_config()['jwt']

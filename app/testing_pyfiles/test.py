@@ -3,10 +3,10 @@ import io
 import threading
 import time
 
-from app.db.db import get_test_cases_by_task
-from app.db.db import update_solution_status
+from  db.db import get_test_cases_by_task
+from  db.db import update_solution_status
 
-from app.schemas.tests import TestCase
+from  schemas.tests import TestCase
 
 
 class TeacherList:

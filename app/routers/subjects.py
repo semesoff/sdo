@@ -2,9 +2,9 @@ from fastapi import APIRouter, Header
 from fastapi.responses import JSONResponse
 from http import HTTPStatus
 
-from app.core.check_auth import check_auth
+from  core.check_auth import check_auth
 
-from app.db.db import get_user_subjects, is_user_enrolled_in_subject, get_tasks_by_subject
+from  db.db import get_user_subjects, is_user_enrolled_in_subject, get_tasks_by_subject
 
 router = APIRouter()
 

@@ -4,7 +4,7 @@ from typing import Union
 from fastapi import Header, HTTPException
 from starlette.responses import JSONResponse
 
-from app.core.jwt_handler import decode_access_token
+from  core.jwt_handler import decode_access_token
 
 
 def check_auth(authorization: str = Header(...)) -> Union[JSONResponse, dict]:

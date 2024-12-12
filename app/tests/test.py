@@ -1,4 +1,4 @@
-from app.db.db import *
+from  db.db import *
 
 
 # Определение функций

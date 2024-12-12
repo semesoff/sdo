@@ -6,9 +6,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.dialects.postgresql import ENUM
 
-from app.config.config import init_config
-from app.schemas.auth import RegisterRequest
-from app.schemas.users import User as UserSchema
+from  config.config import init_config
+from  schemas.auth import RegisterRequest
+from  schemas.users import User as UserSchema
 import logging
 
 logging.basicConfig(level=logging.CRITICAL)  # Глобально отключить все логи, кроме критических
