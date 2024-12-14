@@ -1,4 +1,4 @@
-from  db.db import *
+from app.db.db import *
 
 
 # Определение функций
@@ -17,7 +17,8 @@ create_tables()
 add_user_test(username='admin', password='adminPass', role_type='admin', form_education='Бюджет',
               faculty='Информационные системы и технологии', first_name='Admin', last_name='User', middle_name=None)
 add_user_test(username='teacher1', password='teacherPass', role_type='teacher', form_education=None,
-              faculty='Информационные системы и технологии', first_name='Иван', last_name='Калмыков', middle_name='Денисович')
+              faculty='Информационные системы и технологии', first_name='Иван', last_name='Калмыков',
+              middle_name='Денисович')
 add_user_test(username='student', password='student', role_type='student', study_group='211-365',
               form_education='Платная', faculty='Вычислительная техника и программное обеспечение',
               first_name='Петров', last_name='Антон', middle_name='Данилович')

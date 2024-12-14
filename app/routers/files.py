@@ -2,11 +2,11 @@ from fastapi import APIRouter, Header, UploadFile, File, Depends
 from fastapi.responses import JSONResponse
 from http import HTTPStatus
 
-from  core.check_auth import check_auth
-from  core.files.files import check_type
-from  db.db import add_solution, get_subject_id_by_task, is_user_enrolled_in_subject, get_task_data, \
+from app.core.check_auth import check_auth
+from app.core.files.files import check_type
+from app.db.db import add_solution, get_subject_id_by_task, is_user_enrolled_in_subject, get_task_data, \
     get_latest_solution, get_user_solutions_by_task
-from  testing_pyfiles.test import check_file
+from app.testing_pyfiles.test import check_file
 
 router = APIRouter()
 

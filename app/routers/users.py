@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, Header
 from fastapi.responses import JSONResponse
 from http import HTTPStatus
 
-from  core.check_auth import check_auth
-from  db.db import get_user_data
-from  schemas.users import UserStatus
+from app.core.check_auth import check_auth
+from app.db.db import get_user_data
+from app.schemas.users import UserStatus
 
 router = APIRouter()
 

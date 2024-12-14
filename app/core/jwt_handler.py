@@ -1,7 +1,7 @@
 import jwt
 from datetime import datetime, timedelta
 from typing import Optional, Union
-from config.config import init_config
+from app.config.config import init_config
 
 
 config = init_config()['jwt']
