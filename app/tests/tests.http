@@ -32,7 +32,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c
 Content-Type: application/json
 
 ###
-# Получение информации о задаче с ID 1
+# Получение тасков с subject_id=1
 GET http://localhost:8000/tasks/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6InN0dWRlbnQiLCJyb2xldHlwZSI6InN0dWRlbnQiLCJzdHVkeWdyb3VwIjoiMjExLTM2NSIsImV4cCI6MTczNjM2NjQ2Nn0.o1BvD-M4xecd86Ox-3bPDuKPZWpYHI4T0qVETK_sjk8
 Content-Type: application/json
