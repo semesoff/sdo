@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS "Task" CASCADE;
 DROP TABLE IF EXISTS "UserHasSubject" CASCADE;
 DROP TABLE IF EXISTS "User" CASCADE;
 DROP TABLE IF EXISTS "Subject" CASCADE;
+DROP TABLE IF EXISTS "user_subject_grades" CASCADE;
 
 -- Создание таблиц
 CREATE TABLE "User"
@@ -14,9 +15,12 @@ CREATE TABLE "User"
     username       VARCHAR(64) UNIQUE NOT NULL,
     password       VARCHAR(255)       NOT NULL,
     roleType       VARCHAR(10)        NOT NULL DEFAULT 'student',
-    studyGroup     VARCHAR(32)        NOT NULL,
+    studyGroup     VARCHAR(32),
     form_education VARCHAR(255)       NOT NULL DEFAULT 'Не указано',
-    faculty        VARCHAR(255)       NOT NULL DEFAULT 'Не указано'
+    faculty        VARCHAR(255)       NOT NULL DEFAULT 'Не указано',
+    first_name     VARCHAR(64)        NOT NULL,
+    last_name      VARCHAR(64)        NOT NULL,
+    middle_name    VARCHAR(64)
 );
 
 CREATE TABLE "Subject"
@@ -74,11 +78,19 @@ CREATE TABLE "UserHasSubject"
     PRIMARY KEY (user_id, subject_id)
 );
 
+CREATE TABLE "user_subject_grades"
+(
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES "User" (id),
+    subject_id INTEGER NOT NULL REFERENCES "Subject" (id),
+    grade      FLOAT
+);
+
 -- Добавление пользователей
-INSERT INTO "User" (username, password, roleType, studyGroup, form_education, faculty)
-VALUES ('admin', 'adminPass', 'admin', 'АдминГруппа', 'Бюджет', 'Информационные системы и технологии'),
-       ('teacher1', 'teacherPass', 'teacher', 'УчительГруппа', 'Бюджет', 'Информационные системы и технологии'),
-       ('student', 'student', 'student', '211-365', 'Платная', 'Вычислительная техника и программное обеспечение');
+INSERT INTO "User" (username, password, roleType, studyGroup, form_education, faculty, first_name, last_name, middle_name)
+VALUES ('admin', 'adminPass', 'admin', 'АдминГруппа', 'Бюджет', 'Информационные системы и технологии', 'Admin', 'User', NULL),
+       ('teacher1', 'teacherPass', 'teacher', 'УчительГруппа', 'Бюджет', 'Информационные системы и технологии', 'Иван', 'Калмыков', 'Денисович'),
+       ('student', 'student', 'student', '211-365', 'Платная', 'Вычислительная техника и программное обеспечение', 'Петров', 'Антон', 'Данилович');
 
 -- Добавление дисциплин
 INSERT INTO "Subject" (name)
