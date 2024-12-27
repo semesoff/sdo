@@ -14,8 +14,8 @@ CREATE TABLE "User"
     id             SERIAL PRIMARY KEY,
     username       VARCHAR(64) UNIQUE NOT NULL,
     password       VARCHAR(255)       NOT NULL,
-    roleType       VARCHAR(10)        NOT NULL DEFAULT 'student',
-    studyGroup     VARCHAR(32),
+    "roleType"       VARCHAR(10)        NOT NULL DEFAULT 'student',
+    "studyGroup"     VARCHAR(32),
     form_education VARCHAR(255)       NOT NULL DEFAULT 'Не указано',
     faculty        VARCHAR(255)       NOT NULL DEFAULT 'Не указано',
     first_name     VARCHAR(64)        NOT NULL,
@@ -34,8 +34,8 @@ CREATE TABLE "Task"
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(128) UNIQUE NOT NULL,
     description     VARCHAR(2048),
-    maxSymbolsCount INTEGER,
-    maxStringsCount INTEGER,
+    "maxSymbolsCount" INTEGER,
+    "maxStringsCount" INTEGER,
     construction    VARCHAR(128),
     teacher_formula VARCHAR,
     input_variables VARCHAR,
@@ -47,9 +47,9 @@ CREATE TABLE "Solution"
     id                SERIAL PRIMARY KEY,
     code              TEXT    NOT NULL,
     mark              INTEGER,
-    lengthTestResult  BOOLEAN,
-    formulaTestResult BOOLEAN,
-    autoTestResult    INTEGER,
+    "lengthTestResult"  BOOLEAN,
+    "formulaTestResult" BOOLEAN,
+    "autoTestResult"    INTEGER,
     status            VARCHAR,
     "User_id"         INTEGER NOT NULL REFERENCES "User" (id),
     "Task_id"         INTEGER REFERENCES "Task" (id)
@@ -87,7 +87,7 @@ CREATE TABLE "user_subject_grades"
 );
 
 -- Добавление пользователей
-INSERT INTO "User" (username, password, roleType, studyGroup, form_education, faculty, first_name, last_name, middle_name)
+INSERT INTO "User" (username, password, "roleType", "studyGroup", form_education, faculty, first_name, last_name, middle_name)
 VALUES ('admin', 'adminPass', 'admin', 'АдминГруппа', 'Бюджет', 'Информационные системы и технологии', 'Admin', 'User', NULL),
        ('teacher1', 'teacherPass', 'teacher', 'УчительГруппа', 'Бюджет', 'Информационные системы и технологии', 'Иван', 'Калмыков', 'Денисович'),
        ('student', 'student', 'student', '211-365', 'Платная', 'Вычислительная техника и программное обеспечение', 'Петров', 'Антон', 'Данилович');
@@ -107,7 +107,7 @@ VALUES (2, 1),
        (3, 4);
 
 -- Добавление заданий
-INSERT INTO "Task" (name, "Subject_id", description, maxSymbolsCount, maxStringsCount, teacher_formula, input_variables)
+INSERT INTO "Task" (name, "Subject_id", description, "maxSymbolsCount", "maxStringsCount", teacher_formula, input_variables)
 VALUES ('Задание 1. Python - числовые типы', 1,
         'Задача на числовые типы\nПример входных данных: 1 2 3\nПример выходных данных: 0 2', 128, 10,
         'b1=a1+a2-a3\nb2=b1+a2', 'a1\na2\na3'),

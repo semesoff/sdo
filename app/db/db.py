@@ -280,7 +280,9 @@ def add_user_test(username, password, role_type='student', study_group='-', form
                   first_name='Иван', last_name='Иванов', middle_name='Иванович'):
     """
     Добавляет нового пользователя в базу данных.
-
+    :param first_name:
+    :param last_name:
+    :param middle_name:
     :param faculty:
     :param form_education:
     :param username: Имя пользователя (уникальное)
