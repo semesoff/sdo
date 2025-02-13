@@ -4,7 +4,7 @@ from http import HTTPStatus
 
 from app.core.check_auth import check_auth
 from app.db.db import get_user_data
-from app.schemas.users import UserStatus
+from app.schemas.users import UserStatus, User
 
 router = APIRouter()
 
@@ -22,12 +22,12 @@ def get_user_status(authorization: str = Header(...)) -> JSONResponse:
     )
 
 
-@router.get("/user_status")
+@router.get("/user_status", response_model=UserStatus, summary="Получение статуса пользователя (преподаватель, студент)")
 async def user_status(data_request: dict = Depends(get_user_status)):
     return data_request
 
 
-@router.get("/user_data")
+@router.get("/user_data", response_model=User, summary="Получение данных пользователя")
 async def user_data(authorization: str = Header(...)) -> JSONResponse:
     check_data = check_auth(authorization)
     if isinstance(check_data, JSONResponse):
@@ -35,12 +35,6 @@ async def user_data(authorization: str = Header(...)) -> JSONResponse:
 
     # Assuming you have a function to get user data from the decoded token
     user_data = get_user_data(check_data['username'])
-
-    if user_data is None:
-        return JSONResponse(
-            status_code=HTTPStatus.NOT_FOUND,
-            content={"error": "User not found"}
-        )
 
     return JSONResponse(
         status_code=HTTPStatus.OK,

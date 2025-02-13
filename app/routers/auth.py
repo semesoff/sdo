@@ -13,7 +13,7 @@ router = APIRouter()
 cfg = init_config()['jwt']
 
 
-@router.post("/login")
+@router.post("/login", response_model=LoginResponse, summary="Авторизация пользователя")
 async def login(request: LoginRequest):
     user_data = validate_user(
         username=request.username,
@@ -35,7 +35,7 @@ async def login(request: LoginRequest):
     )
 
 
-@router.post("/register")
+@router.post("/register", response_model=RegisterResponse, summary="Регистрация пользователя")
 async def register(request: RegisterRequest):
     user_data = validate_user(
         username=request.username,
@@ -64,11 +64,11 @@ async def register(request: RegisterRequest):
 
     # generate jwt token & more
     user_token = create_access_token(jwt_data, timedelta(seconds=cfg['expires_in']))
-    login_response = RegisterResponse(
+    register_response = RegisterResponse(
         access_token=user_token,
         role=res_data.get('roletype', 'default_role'),
     )
     return JSONResponse(
         status_code=HTTPStatus.OK,
-        content=login_response.model_dump()
+        content=register_response.model_dump()
     )

@@ -6,9 +6,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.dialects.postgresql import ENUM
 
-from  app.config.config import init_config
-from  app.schemas.auth import RegisterRequest
-from  app.schemas.users import User as UserSchema
+from app.config.config import init_config
+from app.schemas.auth import RegisterRequest
+from app.schemas.subject import SubjectInfo
+from app.schemas.users import User as UserSchema
+from app.schemas.task import Task as TaskSchema
 import logging
 
 logging.basicConfig(level=logging.CRITICAL)  # Глобально отключить все логи, кроме критических
@@ -213,7 +215,7 @@ def validate_user(username: str, password: str) -> Union[dict, bool]:
         return False
 
 
-def get_user_data(username: str) -> UserSchema | None:
+def get_user_data(username: str) -> UserSchema:
     """
     Retrieves all information of a user by username.
 
@@ -236,7 +238,7 @@ def get_user_data(username: str) -> UserSchema | None:
                 faculty=user.faculty
             )
 
-        return None
+        return UserSchema()
 
 
 def add_user(register_data: RegisterRequest) -> Union[dict, str]:
@@ -362,7 +364,7 @@ def reg_user_in_subject(user_id, subject_identifier):
             raise
 
 
-def get_user_subjects(username: str) -> str | list:
+def get_user_subjects(username: str) -> list[SubjectInfo]:
     """
     Получает все дисциплины, на которые зачислен пользователь по ID пользователя.
 
@@ -375,17 +377,17 @@ def get_user_subjects(username: str) -> str | list:
             # Проверяем, существует ли пользователь с таким user_id
             user = session.query(User).filter_by(username=username).first()
             if not user:
-                return "User not found"
+                return list[SubjectInfo]()
 
             # Возвращаем список всех дисциплин, на которые зачислен пользователь
             subjects = []
             for subject in user.subjects:
                 grade = session.query(UserSubjectGrade).filter_by(user_id=user.id, subject_id=subject.id).first()
-                subjects.append([subject.id, subject.name, grade.grade if grade else None])
+                subjects.append(SubjectInfo(id=subject.id, name=subject.name, grade=(grade.grade if grade else None)))
             return subjects
 
         except Exception as e:
-            return f"Error retrieving subjects for user {username}: {e}"
+            return list[SubjectInfo]()
 
 
 def get_subject_id_by_task(task_id: int) -> int | None:
@@ -621,7 +623,7 @@ def get_task_data(task_id: int) -> dict | None:
         return None
 
 
-def get_tasks_by_subject(subject_identifier: str) -> list | str:
+def get_tasks_by_subject(subject_identifier: str) -> list[TaskSchema]:
     """
     Получает все задачи, связанные с предметом по его ID.
 
@@ -634,20 +636,19 @@ def get_tasks_by_subject(subject_identifier: str) -> list | str:
             subject = session.query(Subject).filter_by(id=int(subject_identifier)).first()
 
             if not subject:
-                return "No subjects found"
+                return list[TaskSchema]()
 
             # Получаем задачи, связанные с найденным предметом
             tasks = session.query(Task).filter_by(Subject_id=subject.id).all()
 
             # Если задачи не найдены, возвращаем пустой список
             if not tasks:
-                return []
+                return list[TaskSchema]()
 
-            return [[task.id, task.name, task.description] for task in tasks]
+            return [TaskSchema(id=task.id, name=task.name, description=task.description) for task in tasks]
 
         except Exception as e:
-            print(f"Error retrieving tasks for subject '{subject_identifier}': {e}")
-            return "Error"
+            return list[TaskSchema]()
 
 
 def is_user_enrolled_in_subject(username: str, subject_identifier: str) -> bool | str:

@@ -1,3 +1,5 @@
+from typing import Union
+
 from fastapi import APIRouter, Header, UploadFile, File, Depends
 from fastapi.responses import JSONResponse
 from http import HTTPStatus
@@ -6,13 +8,17 @@ from app.core.check_auth import check_auth
 from app.core.files.files import check_type
 from app.db.db import add_solution, get_subject_id_by_task, is_user_enrolled_in_subject, get_task_data, \
     get_latest_solution, get_user_solutions_by_task
+from app.schemas.files import ResponseUpload
+from app.schemas.others import Error
+from app.schemas.task import TaskInfo, SolutionInfo
+from app.schemas.test import ResponseTest
 from app.testing_pyfiles.test import check_file
 
 router = APIRouter()
 
 
 # Загрузка решения задачи по task_id
-@router.post("/upload/{task_id}")
+@router.post("/upload/{task_id}", response_model=ResponseUpload, summary="Загрузка кода для лабораторной работы")
 async def upload_solution(task_id: int, authorization: str = Header(...), file: UploadFile = File(...)):
     check_data = check_auth(authorization)
     if isinstance(check_data, JSONResponse):
@@ -48,12 +54,14 @@ async def upload_solution(task_id: int, authorization: str = Header(...), file: 
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
-        content={"task_id": task_id}
+        content=ResponseUpload(
+            task_id=task_id,
+        ).model_dump()
     )
 
 
 # Тестирование файла
-@router.post("/test/{task_id}")
+@router.post("/test/{task_id}", response_model=ResponseTest, summary="Тестирование лабораторной работы")
 async def test_solution(task_id: int, authorization: str = Header(...)):
     check_data = check_auth(authorization)
     if isinstance(check_data, JSONResponse):
@@ -102,30 +110,31 @@ async def test_solution(task_id: int, authorization: str = Header(...)):
     if res_check.execution_status == "Failed":
         return JSONResponse(
             status_code=HTTPStatus.BAD_REQUEST,
-            content={
-                "status": res_check.execution_status,
-                "formulas_output": res_check.formulas_output,
-                "code_output": res_check.code_output,
-                "execution_time": res_check.execution_time,
-                "code_length": res_check.code_length,
-            }
+            content=ResponseTest(
+                status=res_check.execution_status,
+                formulas_output=res_check.formulas_output,
+                code_output=res_check.code_output,
+                execution_time=res_check.execution_time,
+                code_length=res_check.code_length,
+            ).model_dump()
         )
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
-        content={
-            "status": res_check.execution_status,
-            "formulas_output": res_check.formulas_output,
-            "code_output": res_check.code_output,
-            "execution_time": res_check.execution_time,
-            "code_length": res_check.code_length,
-        }
+        content=ResponseTest(
+            status=res_check.execution_status,
+            formulas_output=res_check.formulas_output,
+            code_output=res_check.code_output,
+            execution_time=res_check.execution_time,
+            code_length=res_check.code_length,
+        ).model_dump()
     )
 
 
 # Получение информации о задаче по task_id и информация о том, сдал ли пользователь
 # хотя бы одно правильное решение
-@router.get("/task/{task_id}")
+@router.get("/task/{task_id}", response_model=Union[Error, TaskInfo],
+            summary="Получение информации о лабораторной работе и всех ее загруженных решениях")
 async def get_task_info(task_id: int, authorization: str = Header(...)):
     check_data = check_auth(authorization)
     if isinstance(check_data, JSONResponse):
@@ -144,7 +153,7 @@ async def get_task_info(task_id: int, authorization: str = Header(...)):
     if not user_solutions:
         return JSONResponse(
             status_code=HTTPStatus.NOT_FOUND,
-            content={"error": "No solutions found for this task."}
+            content=Error(message="No solutions found for this task.").model_dump()
         )
 
     # Проверка, есть ли хотя бы одно успешное решение
@@ -152,16 +161,14 @@ async def get_task_info(task_id: int, authorization: str = Header(...)):
     status = "Success" if passed_solutions else "Failed"
 
     # Формирование ответа
-    solutions_info = [{"code": sol.code, "status": sol.status} for sol in user_solutions]
+    solutions_info = [SolutionInfo(code=sol.code, status=sol.status) for sol in user_solutions]
     return JSONResponse(
         status_code=HTTPStatus.OK,
-        content={
-            "task": {
-                "id": task_data["id"],
-                "name": task_data["name"],
-                "description": task_data["description"]
-            },
-            "status": status,
-            "solutions": solutions_info
-        }
+        content=TaskInfo(
+            id=task_data['id'],
+            name=task_data['name'],
+            description=task_data['description'],
+            status=status,
+            solutions=solutions_info,
+        ).model_dump()
     )
